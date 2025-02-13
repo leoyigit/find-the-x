@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication & Division Practice ✖️➗</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Sans+MS&display=swap');
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background-color: #ffeb99;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            max-width: 400px;
+            margin: auto;
+            background: #ffcc66;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            border: 5px solid #ff9900;
+        }
+
+        h1 {
+            color: #ff6600;
+            font-size: 26px;
+        }
+
+        .question {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        input {
+            font-size: 22px;
+            padding: 8px;
+            width: 100px;
+            text-align: center;
+            border: 2px solid #ff6600;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        button {
+            background: #33cc33;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            font-size: 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #28a745;
+        }
+
+        .result {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .feedback {
+            font-size: 20px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>✖️➗ Multiplication & Division Practice ✖️➗</h1>
+    <div id="question-container">
+        <p class="question" id="question"></p>
+        <input type="number" id="answer" placeholder="?" onkeypress="handleKeyPress(event)">
+        <br>
+        <button onclick="checkAnswer()">Submit</button>
+        <p class="feedback" id="feedback"></p>
+    </div>
+    <p class="result" id="score"></p>
+</div>
+
+<script>
+    let questions = [];
+    let currentQuestion = 0;
+    let score = 0;
+
+    function generateQuestions() {
+        for (let i = 0; i < 10; i++) {
+            let type = Math.random() < 0.5 ? "multiplication" : "division";
+            let num1, num2, correctAnswer, questionText;
+
+            if (type === "multiplication") {
+                num1 = Math.floor(Math.random() * 10) + 1;
+                num2 = Math.floor(Math.random() * 10) + 1;
+                correctAnswer = num1 * num2;
+                questionText = `${num1} × ${num2} = ?`;
+            } else {
+                correctAnswer = Math.floor(Math.random() * 10) + 1;
+                num2 = Math.floor(Math.random() * 10) + 1;
+                num1 = correctAnswer * num2;
+                questionText = `${num1} ÷ ${num2} = ?`;
+            }
+
+            questions.push({ questionText, correctAnswer });
+        }
+        displayQuestion();
+    }
+
+    function displayQuestion() {
+        if (currentQuestion < questions.length) {
+            document.getElementById("question").textContent = questions[currentQuestion].questionText;
+            document.getElementById("answer").value = "";
+            document.getElementById("feedback").textContent = "";
+            document.getElementById("answer").focus();
+        } else {
+            document.getElementById("question-container").style.display = "none";
+            document.getElementById("score").textContent = `🎉 Quiz Over! Your Score: ${score}/10 🎉`;
+        }
+    }
+
+    function checkAnswer() {
+        let userAnswer = document.getElementById("answer").value;
+        if (userAnswer === "") return;
+
+        if (parseInt(userAnswer) === questions[currentQuestion].correctAnswer) {
+            score++;
+            document.getElementById("feedback").textContent = "✅ Correct! 🎉";
+            document.getElementById("feedback").style.color = "green";
+        } else {
+            document.getElementById("feedback").textContent = `❌ Wrong! The correct answer was ${questions[currentQuestion].correctAnswer}.`;
+            document.getElementById("feedback").style.color = "red";
+        }
+
+        currentQuestion++;
+        setTimeout(displayQuestion, 1000);
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            checkAnswer();
+        }
+    }
+
+    generateQuestions();
+</script>
+
+</body>
+</html>
