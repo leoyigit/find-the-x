@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dorian finding X</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .quiz-container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .question {
+            font-size: 20px;
+            margin: 15px 0;
+        }
+        input {
+            font-size: 18px;
+            padding: 5px;
+            width: 80px;
+            text-align: center;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Dorian's Math Practice</h1>
+    <div id="question-container">
+        <p class="question" id="question"></p>
+        <input type="number" id="answer" placeholder="">
+        <button onclick="checkAnswer()">Submit</button>
+        <p id="feedback"></p>
+    </div>
+    <p class="result" id="score"></p>
+</div>
+
+<script>
+    let questions = [];
+    let currentQuestion = 0;
+    let score = 0;
+
+    function generateQuestions() {
+        for (let i = 0; i < 10; i++) {
+            let num1 = Math.floor(Math.random() * 21);
+            let num2 = Math.floor(Math.random() * 21);
+            let question, correctAnswer;
+
+            if (Math.random() > 0.5) {
+                if (num1 > num2) [num1, num2] = [num2, num1];
+                question = `${num1} + x = ${num2}`;
+                correctAnswer = num2 - num1;
+            } else {
+                if (num1 < num2) [num1, num2] = [num2, num1];
+                question = `${num1} - y = ${num2}`;
+                correctAnswer = num1 - num2;
+            }
+
+            questions.push({ question, correctAnswer });
+        }
+        displayQuestion();
+    }
+
+    function displayQuestion() {
+        if (currentQuestion < questions.length) {
+            document.getElementById("question").textContent = questions[currentQuestion].question;
+            document.getElementById("answer").value = "";
+            document.getElementById("feedback").textContent = "";
+        } else {
+            document.getElementById("question-container").style.display = "none";
+            document.getElementById("score").textContent = `Quiz Over! Your Score: ${score}/10`;
+        }
+    }
+
+    function checkAnswer() {
+        let userAnswer = document.getElementById("answer").value;
+        if (userAnswer === "") return;
+
+        if (parseInt(userAnswer) === questions[currentQuestion].correctAnswer) {
+            score++;
+            document.getElementById("feedback").textContent = "Correct! 🎉";
+            document.getElementById("feedback").style.color = "green";
+        } else {
+            document.getElementById("feedback").textContent = `Wrong! The correct answer was ${questions[currentQuestion].correctAnswer}.`;
+            document.getElementById("feedback").style.color = "red";
+        }
+
+        currentQuestion++;
+        setTimeout(displayQuestion, 1000);
+    }
+
+    generateQuestions();
+</script>
+
+</body>
+</html>
